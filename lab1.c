@@ -11,12 +11,10 @@ int main(void){
         if (childPID == 0){ //child process
             var_lcl++;
             var_glb++;
-            printf("\n Child process :: var_lcl = [\%d], var_glb[\%d]\n", var_lcl, var_glb);
         }
         else{ //parent process
             var_lcl = 10;
             var_glb = 20;
-            printf("\n Parent process :: var_lcl = [\%d], var_glb[\%d]\n", var_lcl, var_glb);
         }
     }
     else{ //fork failed
