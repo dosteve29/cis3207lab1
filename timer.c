@@ -1,20 +1,23 @@
 #include <stdio.h> //library for basic operation
 #include <unistd.h> //library for pid
+#include <sys/types.h> 
+#include <sys/wait.h>
 #include <time.h> //library for time
 
-int var_glb = 0;
+void application(int n);
+
 int main(void){
     pid_t childPID;
-    int var_lcl = 0;
+    clock_t cstart = clock();
+    clock_t cend = 0;
     childPID = fork();
     if (childPID >= 0){ //fork success
         if (childPID == 0){ //child process
-            var_lcl++;
-            var_glb++;
+            char *args[] = {"./app", "Hello", NULL};
+            execvp(args[0], args);
         }
         else{ //parent process
-            var_lcl = 10;
-            var_glb = 20;
+            waitpid(childPID,0,0);
         }
     }
     else{ //fork failed
@@ -22,4 +25,10 @@ int main(void){
         return 1;
     }
     return 0;
+}
+
+//The first program to be made.
+//n is the number of iterations
+void application(int n){
+    
 }
