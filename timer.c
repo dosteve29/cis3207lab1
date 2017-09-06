@@ -2,18 +2,29 @@
 #include <unistd.h> //library for pid
 #include <sys/types.h> 
 #include <sys/wait.h>
+#include <sys/time.h>
 #include <time.h> //library for time
 
 void application(int n);
 
 int main(void){
     pid_t childPID;
-    clock_t cstart = clock();
-    clock_t cend = 0;
+
+    //getting time
+    struct timeval time1;
+    gettimeofday(&time1, NULL);
+    int time_jawn = (int) time1.tv_sec;
+
+    //writing time to file
+    FILE * time = fopen("time1.txt", "a+");
+    fprintf(time, "%d", time_jawn);
+    fclose(time);
+
+    //CREATE NEW PROCESS
     childPID = fork();
     if (childPID >= 0){ //fork success
         if (childPID == 0){ //child process
-            char *args[] = {"./app", "Hello", NULL};
+            char *args[] = {"./app", NULL};
             execvp(args[0], args);
         }
         else{ //parent process
