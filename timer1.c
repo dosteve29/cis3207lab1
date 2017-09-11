@@ -4,31 +4,34 @@
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <time.h> //library for time
-
-void application(int n);
+#include <stdlib.h> //exit()
 
 int main(void){
-    pid_t childPID;
+    pid_t childPID; 
 
     //getting time
     struct timeval time1;
     gettimeofday(&time1, NULL);
-    int time_jawn = (int) time1.tv_sec;
+    long time_record = (long) time1.tv_usec;
 
     //writing time to file
-    FILE * time = fopen("time1.txt", "a+");
-    fprintf(time, "%d", time_jawn);
-    fclose(time);
+    FILE * time; //file pointer to time1.txt
+    if ((time = fopen("time1.txt", "a+")) == NULL){ //if file pointer fails to open
+        puts("Failed creating/opening the file");
+        exit(1);
+    }
+    fprintf(time, "%d", time_record); //print the time_record before fork() to time1.txt
+    fclose(time); //ALWAYS CLOSE FILE POINTER
 
     //CREATE NEW PROCESS
     childPID = fork();
     if (childPID >= 0){ //fork success
         if (childPID == 0){ //child process
-            char *args[] = {"./app", NULL};
-            execvp(args[0], args);
+            char *args[] = {"./app", NULL}; //create the argument string
+            execvp(args[0], args); //first argument is app name 
         }
         else{ //parent process
-            waitpid(childPID,0,0);
+            waitpid(childPID,NULL,0);
         }
     }
     else{ //fork failed
@@ -36,10 +39,4 @@ int main(void){
         return 1;
     }
     return 0;
-}
-
-//The first program to be made.
-//n is the number of iterations
-void application(int n){
-    
 }

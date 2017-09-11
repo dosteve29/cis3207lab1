@@ -8,23 +8,35 @@
 #include <string.h>
 
 int main(int argc, char *argv[]){
+    //get time
     struct timeval time2;
     gettimeofday(&time2, NULL);
-    int time_jawn2 = (int) time2.tv_sec;
-    
-    FILE * timeptr = fopen("time1.txt", "a+");
-    fprintf(timeptr, "%d", time_jawn2);
+    long time_record2 = (long) time2.tv_usec;
+
+    //write time
+    FILE * timeptr;
+    if ((timeptr = fopen("time1.txt", "a+")) == NULL){ //open in append not to overwrite
+        puts("Failed creating/opening the file.");
+        exit(1);
+    }
+    fprintf(timeptr, "%d", time_record2); //record time of executing the application
     fclose(timeptr);  
 
     //get random time seed before iteration
     srand(time(NULL)); 
     int i;
     //begin iteration
-    for (i = 0; i < 1; i++){
+    for (i = 0; i < 100; i++){
         //create file
         char filename[20];
         sprintf(filename, "%d.txt", getpid()); //formatted string to get unique filename
-        FILE * fp = fopen(filename, "a+"); //create the file
+        FILE * fp;
+        if ((fp = fopen(filename, "w+")) == NULL){ //empty file each pass
+            puts("Failed creating/opening the file.");
+            exit(1);
+        }
+
+        /* printf("%s\n", filename); */
 
         //write content to memory
         char records[10][121]; //10 records of 120 random alphanumeric char + null terminator
@@ -46,19 +58,22 @@ int main(int argc, char *argv[]){
         } //this does not write the line terminator in the .txt file
 
         //select a random record
-        srand(time(NULL)); //refresh seed again
         int random_record = rand() % 10; //from record 0 to record 9 (total 10 records)
-        fseek(fp, 120 * random_record, SEEK_SET);
-        char buffer[120];
-        fread(buffer, sizeof(char), 120, fp);
-        int retval = strcmp(buffer, records[random_record]);
+        fseek(fp, 120 * random_record, SEEK_SET); 
+        char buffer[120]; //create buffer to read from file
+        fread(buffer, sizeof(char), 120, fp); //read from file to buffer
+        int retval = strcmp(buffer, records[random_record]); //compare buffer and record
         if (retval == 0)
             printf("They're the same!\n");
         else
             printf("They're not the same!\n");
 
-        printf("%s\n", buffer);
-        printf("%s\n", records[random_record]);
+        /* printf("%d\n", random_record); */
+        /* printf("%s\n", buffer); */
+        /* printf("%s\n", records[random_record]); */
+
+        //reset to the beginning of the file
+        fseek(fp, 0, SEEK_SET);
 
         //always close file pointer
         fclose(fp);
