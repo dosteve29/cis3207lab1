@@ -14,9 +14,12 @@ int main(void){
     gettimeofday(&time1, NULL);
     long time_record = (long) time1.tv_usec;
 
+    char time_filename[20];
+    sprintf(time_filename, "%dtime.txt", getpid());
+
     //writing time to file
     FILE * time; //file pointer to time1.txt
-    if ((time = fopen("time1.txt", "a+")) == NULL){ //if file pointer fails to open
+    if ((time = fopen(time_filename, "a+")) == NULL){ //if file pointer fails to open
         puts("Failed creating/opening the file");
         exit(1);
     }

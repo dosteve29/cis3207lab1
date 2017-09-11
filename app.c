@@ -13,14 +13,22 @@ int main(int argc, char *argv[]){
     gettimeofday(&time2, NULL);
     long time_record2 = (long) time2.tv_usec;
 
+    //same time_filename from timer1.c
+    char time_filename[20];
+    sprintf(time_filename, "%dtime.txt", getppid()); //uses parent pid to use same filename
+
     //write time
     FILE * timeptr;
-    if ((timeptr = fopen("time1.txt", "a+")) == NULL){ //open in append not to overwrite
+    if ((timeptr = fopen(time_filename, "a+")) == NULL){ //open in append not to overwrite
         puts("Failed creating/opening the file.");
         exit(1);
     }
     fprintf(timeptr, "%d", time_record2); //record time of executing the application
     fclose(timeptr);  
+
+    //data filename creation
+    char filename[20];
+    sprintf(filename, "%d.txt", getpid());
 
     //get random time seed before iteration
     srand(time(NULL)); 
@@ -28,15 +36,13 @@ int main(int argc, char *argv[]){
     //begin iteration
     for (i = 0; i < 100; i++){
         //create file
-        char filename[20];
-        sprintf(filename, "%d.txt", getpid()); //formatted string to get unique filename
         FILE * fp;
         if ((fp = fopen(filename, "w+")) == NULL){ //empty file each pass
             puts("Failed creating/opening the file.");
             exit(1);
         }
 
-        /* printf("%s\n", filename); */
+        printf("%s\n", filename);
 
         //write content to memory
         char records[10][121]; //10 records of 120 random alphanumeric char + null terminator
@@ -68,15 +74,22 @@ int main(int argc, char *argv[]){
         else
             printf("They're not the same!\n");
 
-        /* printf("%d\n", random_record); */
-        /* printf("%s\n", buffer); */
-        /* printf("%s\n", records[random_record]); */
+        printf("%d\n", random_record);
+        printf("%s\n", buffer);
+        printf("%s\n", records[random_record]);
 
         //reset to the beginning of the file
         fseek(fp, 0, SEEK_SET);
 
         //always close file pointer
         fclose(fp);
-    }
+    } //end iteration
+
+    //delete the data file
+    int ret = remove(filename);
+    if (ret == 0)
+        printf("removed data file successfully.\n");
+    else
+        printf("Error in deleting the data file.\n");
     return 0;
 }
