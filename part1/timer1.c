@@ -9,6 +9,8 @@
 int main(void){
     pid_t childPID; 
 
+    printf("Running Timer1! PID: %d\n", getpid());
+    printf("Start Timer!\n");
     //getting time
     struct timeval time1;
     gettimeofday(&time1, NULL);
@@ -23,13 +25,14 @@ int main(void){
         puts("Failed creating/opening the file");
         exit(1);
     }
-    fprintf(time, "%d", time_record); //print the time_record before fork() to time1.txt
+    fprintf(time, "%d", time_record); //print the time_record before fork() to time.txt
     fclose(time); //ALWAYS CLOSE FILE POINTER
 
     //CREATE NEW PROCESS
     childPID = fork();
     if (childPID >= 0){ //fork success
         if (childPID == 0){ //child process
+            printf("Fork Complete!\n");
             char *args[] = {"./app", NULL}; //create the argument string
             execvp(args[0], args); //first argument is app name 
         }
@@ -41,5 +44,6 @@ int main(void){
         printf("\n Fork failed, quitting!\n");
         return 1;
     }
+    printf("Terminating Timer1!\n");
     return 0;
 }
