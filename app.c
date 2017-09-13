@@ -7,23 +7,28 @@
 #include <sys/time.h>
 #include <string.h>
 
+struct timeval time2;
+
 int main(int argc, char *argv[]){
-    printf("Running Application! PID: %d\n", getpid());
-    //get time
-    struct timeval time2;
     gettimeofday(&time2, NULL);
-    long time_record2 = (long) time2.tv_usec;
+    int time_record2 = (int) time2.tv_usec;
+
+    printf("In application! PID: %d\n", getpid());
+
+    char timefile[20];
+    sprintf(timefile, "%dtime.txt", getpid());
 
     //write time
     FILE * timeptr;
-    if ((timeptr = fopen(argv[1], "a+")) == NULL){ //open in append not to overwrite
+    if ((timeptr = fopen(timefile, "a+")) == NULL){ //open in append not to overwrite
         puts("Failed creating/opening the file.");
         exit(1);
     }
+    fprintf(timeptr, "%s", argv[0]);
     fprintf(timeptr, "%d", time_record2); //record time of executing the application
+    printf("Begin time: %s PID: %d\n", argv[0], getpid());
+    printf("End time: %d PID: %d\n", time_record2, getpid());
     fclose(timeptr);  
-
-    printf("End Timer!\n");
 
     //data filename creation
     char filename[20];
@@ -90,6 +95,5 @@ int main(int argc, char *argv[]){
     /*     printf("removed data file successfully.\n"); */
     /* else */
     /*     printf("Error in deleting the data file.\n"); */
-    printf("Terminating Application!\n");
     return 0;
 }
