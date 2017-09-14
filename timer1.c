@@ -1,3 +1,11 @@
+/* 
+ * Timer1 program only requires one fork().
+ * There is no statements between gettimeofday and execlp.
+ * The parent process waits while the child process executes.
+ * timedata1 array is important to be declared before gettimeofday
+ * in order not to disrupt the startup time.
+ *
+ * */
 #include <stdio.h> //library for basic operation
 #include <unistd.h> //library for pid
 #include <sys/wait.h>
@@ -31,6 +39,11 @@ int main(void){
     return 0;
 }
 
+/*
+ * Purpose: a helper function to return a pointer to a string with the start up time
+ * Input: pointer to the empty buffer in the main function, time of the start up time
+ * Output: pointer to buffer with time printed now
+ */
 char * time_start(char * buff, int time){
     sprintf(buff, "%d", time);
     return buff;

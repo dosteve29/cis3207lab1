@@ -1,3 +1,9 @@
+/*
+ * The Application takes in timestamp from the Timer program
+ * and records both the end time and timestamp to a file
+ * Also, the Application handles hard I/O operations to run for several minutes.
+ * At the end, the Application deletes the data file and terminates.
+ */
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -77,7 +83,7 @@ int main(int argc, char *argv[]){
         /*     printf("They're the same!\n"); */
         /* else */
         /*     printf("They're not the same!\n"); */
-
+        /*  */
         /* printf("%d\n", random_record); */
         /* printf("%s\n", buffer); */
         /* printf("%s\n", records[random_record]); */
@@ -91,11 +97,11 @@ int main(int argc, char *argv[]){
 
     //delete the data file
     int ret = remove(filename);
-    if (ret == 0)
-        printf("removed data file successfully.\n");
-    else
-        printf("Error in deleting the data file.\n");
+    /* if (ret == 0) */
+    /*     printf("removed data file successfully.\n"); */
+    /* else */
+    /*     printf("Error in deleting the data file.\n"); */
 
-    printf("Terminating the program!\n");
+    /* printf("Terminating the program!\n"); */
     return 0;
 }
