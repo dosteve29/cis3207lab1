@@ -91,9 +91,11 @@ int main(int argc, char *argv[]){
 
     //delete the data file
     int ret = remove(filename);
-    /* if (ret == 0) */
-    /*     printf("removed data file successfully.\n"); */
-    /* else */
-    /*     printf("Error in deleting the data file.\n"); */
+    if (ret == 0)
+        printf("removed data file successfully.\n");
+    else
+        printf("Error in deleting the data file.\n");
+
+    printf("Terminating the program!\n");
     return 0;
 }

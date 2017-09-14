@@ -36,6 +36,10 @@ int main(void){
                 char unnecessarytimedata1name[20];
                 sprintf(unnecessarytimedata1name, "%dtime.txt", child1);
                 int retval = remove(unnecessarytimedata1name);
+                if (retval == 0)
+                    printf("Successfully removed the child1 (%d) time data as it is unnecessary!\n", child1);
+                else
+                    printf("Failed to remove the child1 time data! Oh no!\n");
             }
         }
     }
